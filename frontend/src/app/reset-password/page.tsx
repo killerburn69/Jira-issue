@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { clientApi } from '../../lib/client-api';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const resetPasswordSchema = z.object({
   newPassword: z.string().min(6, 'Password must be at least 6 characters').max(100, 'Password too long'),
@@ -17,10 +17,8 @@ const resetPasswordSchema = z.object({
 
 type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
 
-export default function ResetPassword() {
+export default function ResetPassword({ token }: { token: string }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const token = searchParams.get('token');
   const [error, setError] = React.useState('');
   const [message, setMessage] = React.useState('');
 
@@ -90,6 +88,7 @@ export default function ResetPassword() {
             Enter your new password below.
           </p>
         </div>
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
@@ -109,7 +108,7 @@ export default function ResetPassword() {
             <input
               {...register('newPassword')}
               type="password"
-              className="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 appearance-none rounded-md w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Enter new password"
             />
             {errors.newPassword && (
@@ -124,7 +123,7 @@ export default function ResetPassword() {
             <input
               {...register('confirmPassword')}
               type="password"
-              className="mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 appearance-none rounded-md w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Confirm new password"
             />
             {errors.confirmPassword && (
